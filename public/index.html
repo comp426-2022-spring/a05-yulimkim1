@@ -58,8 +58,27 @@
 
     </div>
     <div id="multi" class="hidden">
-      
+      <p>Enter how many times you would like a coin to be flipped!</p>
+      <input id = "multipleInput" type = "number">
+
+      <p id="multresult">Results: </p>
+      <p id="multsummary">Summary: </p>
+
+      <script>
+        document.getElementById("multipleInput").addEventListener("change", () => {
+          urlStr = "http://localhost:5555/app/flip/coins/"+document.getElementById("multipleInput").value.toString()
+          fetch(urlStr, {mode: 'cors'}).
+          then(function(response) {
+            return response.json()
+          })
+          .then(function(json){
+            document.getElementById("multresult").innerHTML = "Result: "+json["raw"]
+            document.getElementById("multsummary").innerHTML = "Summary: "+JSON.stringify(["summary"])
+          })
+        })
+      </script>
     </div>
+    
     <div id="guess" class="hidden">
       
     </div>
