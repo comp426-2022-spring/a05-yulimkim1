@@ -78,10 +78,71 @@
         })
       </script>
     </div>
-    
+
     <div id="guess" class="hidden">
-      
+      <button id="ghead"> Click here to guess HEADS</button>
+      <button id="gtails"> Click here to guess TAILS</button>
+
+      <p id="guess">Your Guess is: </p>
+      <p id="cresult">Coin Flip Result is: </p>
+      <p id="message"></p>
+
+      <script>
+        document.getElementById("ghead").addEventListener("click", () => {
+          fetch("http://localhost:5555/app/flip/call/heads", {mode: 'cors'}).
+          then(function(response) {
+            return response.json()
+          })
+          .then(function(json){
+            document.getElementById("guess").innerHTML = "Your Guess is: "+json["call"]
+            document.getElementById("cresult").innerHTML = "Coin Flip Result is: "+json["flip"]
+            document.getElementById("message").innerHTML = "Game outcome: "+json["result"]
+          })
+        })
+
+        document.getElementById("gtails").addEventListener("click", () => {
+          fetch("http://localhost:5555/app/flip/call/tails", {mode: 'cors'}).
+          then(function(response) {
+            return response.json()
+          })
+          .then(function(json){
+            document.getElementById("guess").innerHTML = "Your Guess is: "+json["call"]
+            document.getElementById("cresult").innerHTML = "Coin Flip Result is: "+json["flip"]
+            document.getElementById("message").innerHTML = "Game outcome: "+json["result"]
+          })
+        })
+      </script>
     </div>
+
+    <script>
+
+      function activate(id) {
+        list = ["home", "single", "multi", "guess"]
+        for (const x of list) {
+          document.getElementById(x).classList.add("hidden")
+        }
+        document.getElementById(id).classList.remove("hidden")
+      }
+
+      const home_button = document.getElementById("homenav")
+      home_button.addEventListener("click", () => {
+        activate("home")
+      })
+      const single_button = document.getElementById("singlenav")
+      home_button.addEventListener("click", () => {
+        activate("single")
+      })
+      const multi_button = document.getElementById("multinav")
+      home_button.addEventListener("click", () => {
+        activate("multi")
+      })
+      const guess_button = document.getElementById("guessnav")
+      home_button.addEventListener("click", () => {
+        activate("guess")
+      })
+    </script>
+
 	<script src="main.js"></script>
+  
   </body>
 </html>
