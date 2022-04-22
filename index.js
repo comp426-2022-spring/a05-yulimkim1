@@ -49,7 +49,7 @@ if (log != "false") {
 
 app.use((req, res, next) => {
 let logdata = {
-        i: req.id,
+        //i: req.id,
         remoteaddr: req.ip,
         remoteuser: req.user,
         time: Date.now(),
@@ -61,7 +61,7 @@ let logdata = {
         referer: req.headers['referer'],
         useragent: req.headers['user-agent']
     }
-    const stmt = db.prepare('INSERT INTO accesslog (i, remoteaddr, remoteuser, time, method, url, protocol, httpversion, status, referer, useragent) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)')
+    const stmt = db.prepare('INSERT INTO accesslog (remoteaddr, remoteuser, time, method, url, protocol, httpversion, status, referer, useragent) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)')
     //const table_info = stmt.run(String(logdata.remoteaddr), String(logdata.remoteuser), String(logdata.time), String(logdata.method), String(logdata.url), String(logdata.protocol), String(logdata.httpversion), String(logdata.status), String(logdata.referer), String(logdata.useragent))
     const table_info = stmt.run(logdata.i, logdata.remoteaddr, logdata.remoteuser, logdata.time, logdata.method, logdata.url, logdata.protocol, logdata.httpversion, logdata.status, logdata.referer, logdata.useragent);
     next();
@@ -126,11 +126,21 @@ app.get('/app/flips/:number/', (req, res) => {
     res.status(200).json({'raw': coinFlips(req.params.number), 
     'summary': countFlips(coinFlips(req.params.number))})
 })
-app.post('/app/flip/call/tails/', (req, res) => {
+app.get('/app/flip/call/tails/', (req, res) => {
     res.status(200).json(flipACoin('tails'))
 })
-app.post('/app/flip/call/heads/', (req, res) => {
+app.get('/app/flip/call/heads/', (req, res) => {
     res.status(200).json(flipACoin('heads'))
+})
+
+app.post('/app/flips/coins/', (req, res, next) => {
+    const result = coinFlips(parseInt(req.body.number))
+    const count = countFlips(result)
+    res.status(200).json({"raw": result, "summary": count})
+})
+
+app.post('/a[[/flip/call/', (req, res, next) => {
+    res.status(200).json(flipACoin(req.body.call))
 })
 
 if (debug != "false") {
@@ -149,9 +159,9 @@ if (debug != "false") {
 app.use(function (req, res) {
     res.status(404).send('404 NOT FOUND')
 });
-/*
+
 process.on('SIGTERM', () => {
     server.close(() => {
         console.log('Server stopped')
     })
-})*/
+})

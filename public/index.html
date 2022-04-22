@@ -33,10 +33,29 @@
       <button id="guessnav">Guess the result</button>
     </nav>
     <div id="home">
+      <p>There are three games on this site! 
+        'Flip one coin' will flip a coin and tell you the outcome (heads or tails). 
+        'Flip multiple coins' will ask for a certain number of flips, and will flip that many coins and provide the results. 
+        'Guess the result' will ask you to guess either heads or tails, then will say if you were correct or not.  
+      </p>
       
     </div>    
     <div id="single" class="hidden">
-      
+      <button id = "flipacoin"> Flip a Coin!</button>
+      <p id="resultsingle">Result: </p>
+
+      <script>
+        document.getElementById("flipacoin").addEventListener("click", () => {
+          fetch("http://localhost:5555/app/flip/one/", {mode: 'cors'}).
+          then(function(response) {
+            return response.json()
+          })
+          .then(function(json){
+            document.getElementById("resultsingle").innerHTML = "Result: "+json["result"]
+          })
+        })
+      </script>
+
     </div>
     <div id="multi" class="hidden">
       
