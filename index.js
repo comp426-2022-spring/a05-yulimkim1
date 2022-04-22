@@ -48,24 +48,22 @@ if (log != "false") {
 }
 
 app.use((req, res, next) => {
-let logdata = {
-        //i: req.id,
-        remoteaddr: req.ip,
-        remoteuser: req.user,
-        time: Date.now(),
-        method: req.method,
-        url: req.url,
-        protocol: req.protocol,
-        httpversion: req.httpVersion,
-        status: res.statusCode,
-        referer: req.headers['referer'],
-        useragent: req.headers['user-agent']
-    }
-    const stmt = db.prepare('INSERT INTO accesslog (remoteaddr, remoteuser, time, method, url, protocol, httpversion, status, referer, useragent) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)')
-    //const table_info = stmt.run(String(logdata.remoteaddr), String(logdata.remoteuser), String(logdata.time), String(logdata.method), String(logdata.url), String(logdata.protocol), String(logdata.httpversion), String(logdata.status), String(logdata.referer), String(logdata.useragent))
-    const table_info = stmt.run(logdata.i, logdata.remoteaddr, logdata.remoteuser, logdata.time, logdata.method, logdata.url, logdata.protocol, logdata.httpversion, logdata.status, logdata.referer, logdata.useragent);
-    next();
-});
+    let logdata = {
+            remoteaddr: req.ip,
+            remoteuser: req.user,
+            time: Date.now(),
+            method: req.method,
+            url: req.url,
+            protocol: req.protocol,
+            httpversion: req.httpVersion,
+            status: res.statusCode,
+            referer: req.headers['referer'],
+            useragent: req.headers['user-agent']
+        };
+        const stmt = db.prepare('INSERT INTO accesslog (remoteaddr, remoteuser, time, method, url, protocol, httpversion, status, referer, useragent) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)')
+        const table_info = stmt.run(String(logdata.remoteaddr), String(logdata.remoteuser), String(logdata.time), String(logdata.method), String(logdata.url), String(logdata.protocol), String(logdata.httpversion), String(logdata.status), String(logdata.referrer), String(logdata.useragent))
+        next();
+    });
 
 //flip functions 
 function coinFlip() {
@@ -139,7 +137,7 @@ app.post('/app/flips/coins/', (req, res, next) => {
     res.status(200).json({"raw": result, "summary": count})
 })
 
-app.post('/a[[/flip/call/', (req, res, next) => {
+app.post('/app/flip/call/', (req, res, next) => {
     res.status(200).json(flipACoin(req.body.call))
 })
 
