@@ -41,108 +41,72 @@
       
     </div>    
     <div id="single" class="hidden">
-      <button id = "flipacoin"> Flip a Coin!</button>
-      <p id="resultsingle">Result: </p>
-
-      <script>
-        document.getElementById("flipacoin").addEventListener("click", () => {
-          fetch("http://localhost:5555/app/flip/one/", {mode: 'cors'}).
-          then(function(response) {
-            return response.json()
-          })
-          .then(function(json){
-            document.getElementById("resultsingle").innerHTML = "Result: "+json["result"]
-          })
-        })
-      </script>
-
+      <button id="coin" onclick="one_coin()">Flip a Coin!</button> 
+      <p>Result: <span id="resultsingle"></span></p>
+      <img src="assets/img/coin.png" id="quarter" class="bigcoin">
     </div>
+
     <div id="multi" class="hidden">
-      <p>Enter how many times you would like a coin to be flipped!</p>
-      <input id = "multipleInput" type = "number">
+    <form action="javascript:void(0);" method="post" onsubmit="flipCoins()">
+      <label for="flipnumber">Input the number of coins you want to flip!</label>
+      <input type="number" id="flipnumber" name="flipnumber">
+      <br>
+      <input type="submit" value="Flip the Coins!">
+    </form>
 
-      <p id="multresult">Results: </p>
-      <p id="multsummary">Summary: </p>
-
-      <script>
-        document.getElementById("multipleInput").addEventListener("change", () => {
-          urlStr = "http://localhost:5555/app/flip/coins/"+document.getElementById("multipleInput").value.toString()
-          fetch(urlStr, {mode: 'cors'}).
-          then(function(response) {
-            return response.json()
-          })
-          .then(function(json){
-            document.getElementById("multresult").innerHTML = "Result: "+json["raw"]
-            document.getElementById("multsummary").innerHTML = "Summary: "+JSON.stringify(["summary"])
-          })
-        })
-      </script>
+    <div id="results_tbl" class="hidden">
+      <h4>Result Summary</h4>
+      <table>
+        <thead>
+          <tr>
+            <th scope="col">Flip Outcome:</th>
+            <th scope="col">Number:</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Heads</td>
+            <td><span id="num_heads"></span></td>
+          </tr>
+          <tr>
+            <td>Tails</td>
+            <td><span id="num_tails"></span></td>
+          </tr>
+        </tbody>
+      </table>
+      <h4>Result Details</h4>
+      <table>
+        <thead>
+          <tr>
+            <th scope="col">Flip Number:</th>
+            <th scope="col">    Flip Outcome:</th>
+            <th scope="col"></th>
+          </tr>
+        </thead>
+        <tbody id="details"></tbody>
+      </table>
     </div>
+  </div>
 
     <div id="guess" class="hidden">
-      <button id="ghead"> Click here to guess HEADS</button>
-      <button id="gtails"> Click here to guess TAILS</button>
+      <button id="ghead" onclick="guess_flip('heads')">Click here to guess HEADS</button>
+      <button id="gtails" onclick="guess_flip('tails')">Click here to guess TAILS</button>
+      <br>
 
-      <p id="guess">Your Guess is: </p>
-      <p id="cresult">Coin Flip Result is: </p>
-      <p id="message"></p>
+      <h4>Your Call:</h4>
+      <p><span id="your_call"></span></p>
+      <img src="assets/img/coin.png" id="your_call_img" class="smallcoin">
 
-      <script>
-        document.getElementById("ghead").addEventListener("click", () => {
-          fetch("http://localhost:5555/app/flip/call/heads", {mode: 'cors'}).
-          then(function(response) {
-            return response.json()
-          })
-          .then(function(json){
-            document.getElementById("guess").innerHTML = "Your Guess is: "+json["call"]
-            document.getElementById("cresult").innerHTML = "Coin Flip Result is: "+json["flip"]
-            document.getElementById("message").innerHTML = "Game outcome: "+json["result"]
-          })
-        })
+      <h4>Flip Result:</h4>
+      <p><span id="flip_result"></span></p>
+      <img src="assets/img/coin.png" id="flip_result_img" class="smallcoin">
 
-        document.getElementById("gtails").addEventListener("click", () => {
-          fetch("http://localhost:5555/app/flip/call/tails", {mode: 'cors'}).
-          then(function(response) {
-            return response.json()
-          })
-          .then(function(json){
-            document.getElementById("guess").innerHTML = "Your Guess is: "+json["call"]
-            document.getElementById("cresult").innerHTML = "Coin Flip Result is: "+json["flip"]
-            document.getElementById("message").innerHTML = "Game outcome: "+json["result"]
-          })
-        })
-      </script>
+      <h4>Outcome:</h4>
+      <p><span id="guess_result"></span></p>
+
     </div>
 
-    <script>
-
-      function activate(id) {
-        list = ["home", "single", "multi", "guess"]
-        for (const x of list) {
-          document.getElementById(x).classList.add("hidden")
-        }
-        document.getElementById(id).classList.remove("hidden")
-      }
-
-      const home_button = document.getElementById("homenav")
-      home_button.addEventListener("click", () => {
-        activate("home")
-      })
-      const single_button = document.getElementById("singlenav")
-      home_button.addEventListener("click", () => {
-        activate("single")
-      })
-      const multi_button = document.getElementById("multinav")
-      home_button.addEventListener("click", () => {
-        activate("multi")
-      })
-      const guess_button = document.getElementById("guessnav")
-      home_button.addEventListener("click", () => {
-        activate("guess")
-      })
-    </script>
-
 	<script src="main.js"></script>
-  
+
   </body>
 </html>
